@@ -7,6 +7,8 @@ Servo leftServo;
 // twelve servo objects can be created on most boards
 int pos = 0;    // variable to store the servo position
 
+const int RECV_PIN = 12; // variable to store IR-Reciever position
+IRrecv irrecv(RECV_PIN);
 /*
 const int pwm = 2 ; //initializing pin 2 as pwm
 const int in_1 = 8 ;
@@ -33,6 +35,8 @@ void setup()
    pinMode(pwmLeftMotor,OUTPUT); 
    pinMode(rightMotorDir,OUTPUT);//Logic pins are also set as output
    pinMode(leftMotorDir, OUTPUT);
+   irrecv.enableIRIn();
+   irrecv.blink13(true);
 }
 
 void moveFarward()
@@ -43,6 +47,10 @@ void moveFarward()
 void loop() 
 
 {
+  if (irrecv.decode(&results)){
+        Serial.println(results.value, HEX);
+        irrecv.resume();
+  }
   /*
    while(! Serial)
    Serial.println("Speed 0 to 255");
