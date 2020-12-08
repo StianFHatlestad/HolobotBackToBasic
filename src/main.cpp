@@ -2,25 +2,48 @@
 #include <Servo.h>
 #include <IRremote.h>
 
-Servo myservo;  // create servo object to control a servo
+Servo rightServo;  // create servo object to control a servo
+Servo leftServo;
 // twelve servo objects can be created on most boards
 int pos = 0;    // variable to store the servo position
 
+/*
 const int pwm = 2 ; //initializing pin 2 as pwm
 const int in_1 = 8 ;
 const int in_2 = 9 ;
 //For providing logic to L298 IC to choose the direction of the DC motor
+*/
 
-void setup() {
-  myservo.attach(9);  // attaches the servo on pin 9 to the servo object
+const int rightMotorDir = 2;
+const int pwmRightMotor = 3;
+const int servoMG955 = 6;
+const int leftMotorDir = 8;
+const int pwmLeftMotor = 9;
+const int servoSG90 = 11;
+//Digital pin 12 is taken
 
-   pinMode(pwm,OUTPUT) ; //we have to set PWM pin as output
-   pinMode(in_1,OUTPUT) ; //Logic pins are also set as output
-   pinMode(in_2,OUTPUT) ;
+
+
+void setup() 
+{
+  rightServo.attach(servoMG955);  // attaches the servo on pin 9 to the servo object
+  leftServo.attach(servoSG90);
+
+   pinMode(pwmRightMotor,OUTPUT); //we have to set PWM pin as output
+   pinMode(pwmLeftMotor,OUTPUT); 
+   pinMode(rightMotorDir,OUTPUT);//Logic pins are also set as output
+   pinMode(leftMotorDir, OUTPUT);
+}
+
+void moveFarward()
+{
+
 }
 
 void loop() 
+
 {
+  /*
    while(! Serial)
    Serial.println("Speed 0 to 255");
    
@@ -36,11 +59,12 @@ void loop()
    digitalWrite(in_1,HIGH) ;
    digitalWrite(in_2,LOW) ;
    //analogWrite(pwm,255) ;
-
+*/
    /* setting pwm of the motor to 255 we can change the speed of rotation
    by changing pwm input but we are only using arduino so we are using highest
    value to driver the motor */
    //Clockwise for 3 secs
+ /* 
    delay(3000) ;
    
    //For brake
@@ -70,5 +94,5 @@ void loop()
     myservo.write(pos);              // tell servo to go to position in variable 'pos'
     delay(15);                       // waits 15ms for the servo to reach the position
   }
+  */
 }
-// a
