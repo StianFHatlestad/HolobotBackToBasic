@@ -2,8 +2,8 @@
 #include <Servo.h>
 #include <IRremote.h>
 
-Servo rightServo;  // create servo object to control a servo
-Servo leftServo;
+Servo upDownServo;  // create servo object to control a servo
+Servo forkServo;
 // twelve servo objects can be created on most boards
 int pos = 0;    // variable to store the servo position
 
@@ -27,18 +27,21 @@ const int servoSG90 = 11;
 void setup() 
 {
   Serial.begin(9600);
-  rightServo.attach(servoMG955);  // attaches the servo on pin 9 to the servo object
-  leftServo.attach(servoSG90);
+  upDownServo.attach(servoMG955);  // attaches the servo on pin 9 to the servo object
+  forkServo.attach(servoSG90);
 
-   pinMode(pwmRightMotor,OUTPUT); //we have to set PWM pin as output
-   pinMode(pwmLeftMotor,OUTPUT); 
-   pinMode(rightMotorDir,OUTPUT);//Logic pins are also set as output
-   pinMode(leftMotorDir, OUTPUT);
-   irrecv.enableIRIn();
-   irrecv.blink13(true);
+  pinMode(pwmRightMotor,OUTPUT); //we have to set PWM pin as output
+  pinMode(pwmLeftMotor,OUTPUT); 
+  pinMode(rightMotorDir,OUTPUT);//Logic pins are also set as output
+  pinMode(leftMotorDir, OUTPUT);
+  irrecv.enableIRIn();
+  irrecv.blink13(true);
 
-   runMotor("init",pwmLeftMotor,leftMotorDir);
-   runMotor("init",pwmRightMotor,rightMotorDir);
+  runMotor("init",pwmLeftMotor,leftMotorDir);//init on the motors
+  runMotor("init",pwmRightMotor,rightMotorDir);
+
+  upDownServo.write(pos); //init on the servo
+  forkServo.write(pos);
 
 }
 
@@ -68,7 +71,8 @@ void runMotor(String mode, int pwm, int dir)
 void loop() 
 
 {
-  if (irrecv.decode(&results)){
+  if (irrecv.decode(&results))
+  {
         Serial.println(results.value, HEX);
         irrecv.resume();
   }
@@ -98,53 +102,14 @@ void loop()
   runMotor("run",pwmRightMotor,rightMotorDir);
 
   // IR lift box button
-  leftServo.write(90);
-  rightServo.write(90);
-  delay(1000);
+  upDownServo.write(90);
+  delay(2000);
   // IR place box button
-  leftServo.write(0);
-  rightServo.write(0);
-  delay(1000)
+  upDownServo.write(0);
+  delay(2000);
+
+
   /*
-   while(! Serial)
-   Serial.println("Speed 0 to 255");
-   
-   if (Serial.available()) 
-   {
-      int speed = Serial.parseInt();
-      if (speed >= 0 && speed <= 255) 
-      {
-         analogWrite(pwm, speed);
-      }
-   }
-   //For Clock wise motion , in_1 = High , in_2 = Low
-   digitalWrite(in_1,HIGH) ;
-   digitalWrite(in_2,LOW) ;
-   //analogWrite(pwm,255) ;
-*/
-   /* setting pwm of the motor to 255 we can change the speed of rotation
-   by changing pwm input but we are only using arduino so we are using highest
-   value to driver the motor */
-   //Clockwise for 3 secs
- /* 
-   delay(3000) ;
-   
-   //For brake
-   digitalWrite(in_1,HIGH) ;
-   digitalWrite(in_2,HIGH) ;
-   delay(1000) ;
-   
-   //For Anti Clock-wise motion - IN_1 = LOW , IN_2 = HIGH
-   digitalWrite(in_1,LOW) ;
-   digitalWrite(in_2,HIGH) ;
-   delay(3000) ;
-
-   //For brake
-   digitalWrite(in_1,HIGH) ;
-   digitalWrite(in_2,HIGH) ;
-   delay(1000) ;
-
-
   for (pos = 0; pos <= 180; pos += 1)
   { // goes from 0 degrees to 180 degrees
     // in steps of 1 degree
