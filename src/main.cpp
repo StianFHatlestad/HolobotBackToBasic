@@ -26,7 +26,8 @@ const int servoSG90 = 11;
 
 void setup() 
 {
-  Serial.begin(9600);
+  irrecv.enableIRIn();
+  irrecv.blink13(true);
   upDownServo.attach(servoMG955);  // attaches the servo on pin 9 to the servo object
   forkServo.attach(servoSG90);
 
@@ -73,8 +74,14 @@ void loop()
 {
   if (irrecv.decode(&results))
   {
-        Serial.println(results.value, HEX);
-        irrecv.resume();
+     switch(results.value){
+          case 0xFF18E7: //Keypad button "2" // IR forward button pressed
+          digitalWrite(leftMotorDir, HIGH);
+          digitalWrite(rightMotorDir, HIGH);
+          runMotor("run",pwmLeftMotor,leftMotorDir);
+          runMotor("run",pwmRightMotor,rightMotorDir);
+          }
+      irrecv.resume();
   }
 
   // IR forward button pressed
