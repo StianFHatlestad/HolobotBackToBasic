@@ -10,6 +10,7 @@ int pos = 0;    // variable to store the servo position
 const int RECV_PIN = 12; // variable to store IR-Reciever position
 IRrecv irrecv(RECV_PIN);
 decode_results results;
+unsigned long key_value = 0;
 /*
 const int pwm = 2 ; //initializing pin 2 as pwm
 const int in_1 = 8 ;
@@ -77,7 +78,7 @@ void loop()
   {
     if (results.value == 0XFFFFFFFF)
     results.value = key_value;
-    
+
      switch(results.value){
           case 0xFF18E7: //Keypad button "2" // IR forward button pressed
           digitalWrite(leftMotorDir, HIGH);
