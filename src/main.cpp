@@ -28,6 +28,8 @@ const int pwmLeftMotor = 9;
 const int servoSG90 = 11;
 //Digital pin 12 is taken
 
+LiquidCrystal_I2C lcd(0x27,2,1,0,4,5,6,7); // 0x27 is the default I2C bus address of the backpack-see article
+
 void setup() 
 {
   irrecv.enableIRIn();
@@ -42,6 +44,14 @@ void setup()
   irrecv.enableIRIn();
   irrecv.blink13(true);
 
+  // Set off LCD module
+   lcd.begin (16,2); // 16 x 2 LCD module
+   lcd.setBacklightPin(3,POSITIVE); // BL, BL_POL
+   lcd.setBacklight(HIGH);
+   lcd.print("Hello, World!");
+   lcd.setCursor(0,1);
+   lcd.print("Good Day");   
+
   runMotor("init",pwmLeftMotor,leftMotorDir);//init on the motors
   runMotor("init",pwmRightMotor,rightMotorDir);
 
@@ -49,6 +59,7 @@ void setup()
   forkServo.write(pos);
 
 }
+
 
 void runMotor(String mode, int pwm, int dir)
 {
