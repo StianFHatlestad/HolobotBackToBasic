@@ -24,8 +24,6 @@ const int pwmLeftMotor = 9;
 const int servoSG90 = 11;
 //Digital pin 12 is taken
 
-
-
 void setup() 
 {
   Serial.begin(9600);
@@ -38,11 +36,33 @@ void setup()
    pinMode(leftMotorDir, OUTPUT);
    irrecv.enableIRIn();
    irrecv.blink13(true);
+
+   runMotor("init",pwmLeftMotor,leftMotorDir);
+   runMotor("init",pwmRightMotor,rightMotorDir);
+
 }
 
-void moveFarward()
+void runMotor(String mode, int pwm, int dir)
 {
+  if (mode.equals("init"))
+  {
+    analogWrite(pwm, 255); delay(2000);
+    analogWrite(pwm, 0); delay(1000); 
+  }
+  else
+  {
+    delay(2000);
 
+    for (int i = 0; i < 3; i++)
+    {
+      // we do serial runs of minimum speed (63 = 25%), half speed (127 = 50%) and full speed (255 = 100%)
+      analogWrite(pwm, pow(2,i+6)-1);
+      delay(1500);
+      analogWrite(pwm, 0);
+      delay(1000);
+    }
+  }
+  
 }
 
 void loop() 
@@ -52,6 +72,39 @@ void loop()
         Serial.println(results.value, HEX);
         irrecv.resume();
   }
+
+  // IR forward button pressed
+  digitalWrite(leftMotorDir, HIGH);
+  digitalWrite(rightMotorDir, HIGH);
+  runMotor("run",pwmLeftMotor,leftMotorDir);
+  runMotor("run",pwmRightMotor,rightMotorDir);
+
+  // IR backwards button pressed
+  digitalWrite(leftMotorDir, LOW);
+  digitalWrite(rightMotorDir, LOW);
+  runMotor("run",pwmLeftMotor,leftMotorDir);
+  runMotor("run",pwmRightMotor,rightMotorDir);
+
+  // IR right button pressed
+  digitalWrite(leftMotorDir, HIGH);
+  digitalWrite(rightMotorDir, LOW);
+  runMotor("run",pwmLeftMotor,leftMotorDir);
+  runMotor("run",pwmRightMotor,rightMotorDir);
+
+  // IR left button pressed
+  digitalWrite(leftMotorDir, LOW);
+  digitalWrite(rightMotorDir, HIGH);
+  runMotor("run",pwmLeftMotor,leftMotorDir);
+  runMotor("run",pwmRightMotor,rightMotorDir);
+
+  // IR lift box button
+  leftServo.write(90);
+  rightServo.write(90);
+  delay(1000);
+  // IR place box button
+  leftServo.write(0);
+  rightServo.write(0);
+  delay(1000)
   /*
    while(! Serial)
    Serial.println("Speed 0 to 255");
