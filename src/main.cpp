@@ -1,6 +1,8 @@
 #include <Arduino.h>
 #include <Servo.h>
 #include <IRremote.h>
+#include <Wire.h>
+#include <LiquidCrystal_I2C.h>
 
 Servo upDownServo;  // create servo object to control a servo
 Servo forkServo;
