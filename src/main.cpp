@@ -9,6 +9,7 @@ int pos = 0;    // variable to store the servo position
 
 const int RECV_PIN = 12; // variable to store IR-Reciever position
 IRrecv irrecv(RECV_PIN);
+decode_results results;
 /*
 const int pwm = 2 ; //initializing pin 2 as pwm
 const int in_1 = 8 ;
