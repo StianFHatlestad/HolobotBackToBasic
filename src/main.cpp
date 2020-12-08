@@ -1,6 +1,6 @@
 #include <Arduino.h>
 #include <Servo.h>
-
+#include <IRremote.h>
 Servo myservo;  // create servo object to control a servo
 // twelve servo objects can be created on most boards
 int pos = 0;    // variable to store the servo position
