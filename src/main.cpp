@@ -28,6 +28,7 @@ const int servoSG90 = 11;
 
 void setup() 
 {
+  Serial.begin(9600);
   rightServo.attach(servoMG955);  // attaches the servo on pin 9 to the servo object
   leftServo.attach(servoSG90);
 
