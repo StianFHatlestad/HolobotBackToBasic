@@ -108,47 +108,17 @@ void loop()
           break;
           case 0xFFE01F: //keypad button "vol -" IR drop arm to 0 degrees
           upDownServo.write(0);
+          forkServo.write(60);
           delay(2000);
           break;
           case 0xFFA857: //keypad button "vol +" IR lift arm to 60 degrees
           upDownServo.write(60);
+          forkServo.write(0);
           delay(2000);
           break;
           }
       irrecv.resume();
   }
-
-  // IR forward button pressed
-  digitalWrite(leftMotorDir, HIGH);
-  digitalWrite(rightMotorDir, HIGH);
-  runMotor("run",pwmLeftMotor,leftMotorDir);
-  runMotor("run",pwmRightMotor,rightMotorDir);
-
-  // IR backwards button pressed
-  digitalWrite(leftMotorDir, LOW);
-  digitalWrite(rightMotorDir, LOW);
-  runMotor("run",pwmLeftMotor,leftMotorDir);
-  runMotor("run",pwmRightMotor,rightMotorDir);
-
-  // IR right button pressed
-  digitalWrite(leftMotorDir, HIGH);
-  digitalWrite(rightMotorDir, LOW);
-  runMotor("run",pwmLeftMotor,leftMotorDir);
-  runMotor("run",pwmRightMotor,rightMotorDir);
-
-  // IR left button pressed
-  digitalWrite(leftMotorDir, LOW);
-  digitalWrite(rightMotorDir, HIGH);
-  runMotor("run",pwmLeftMotor,leftMotorDir);
-  runMotor("run",pwmRightMotor,rightMotorDir);
-
-  // IR lift box button
-  upDownServo.write(90);
-  delay(2000);
-  // IR place box button
-  upDownServo.write(0);
-  delay(2000);
-
 
   /*
   for (pos = 0; pos <= 180; pos += 1)
