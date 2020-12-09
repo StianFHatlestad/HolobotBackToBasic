@@ -32,6 +32,37 @@ LiquidCrystal_I2C lcd(0x27,2,1,0,4,5,6,7); // 0x27 is the default I2C bus addres
 
 void setup() 
 {
+  Serial.begin (9600);
+ 
+  // Leonardo: wait for serial port to connect
+  while (!Serial) 
+    {
+    }
+ 
+  Serial.println ();
+  Serial.println ("I2C scanner. Scanning ...");
+  byte count = 0;
+  
+  Wire.begin();
+  for (byte i = 8; i < 120; i++)
+  {
+    Wire.beginTransmission (i);
+    if (Wire.endTransmission () == 0)
+      {
+      Serial.print ("Found address: ");
+      Serial.print (i, DEC);
+      Serial.print (" (0x");
+      Serial.print (i, HEX);
+      Serial.println (")");
+      count++;
+      delay (1);  // maybe unneeded?
+      } // end of good response
+  } // end of for loop
+  Serial.println ("Done.");
+  Serial.print ("Found ");
+  Serial.print (count, DEC);
+  Serial.println (" device(s).");
+/*
   irrecv.enableIRIn();
   irrecv.blink13(true);
   upDownServo.attach(servoMG955);  // attaches the servo on pin 9 to the servo object
@@ -57,7 +88,7 @@ void setup()
 
   upDownServo.write(pos); //init on the servo
   forkServo.write(pos);
-
+*/
 }
 
 
@@ -87,6 +118,7 @@ void runMotor(String mode, int pwm, int dir)
 void loop() 
 
 {
+  /*
   if (irrecv.decode(&results))
   {
     if (results.value == 0XFFFFFFFF)
@@ -130,7 +162,7 @@ void loop()
           }
       irrecv.resume();
   }
-
+  */
   /*
   for (pos = 0; pos <= 180; pos += 1)
   { // goes from 0 degrees to 180 degrees
